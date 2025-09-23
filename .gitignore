@@ -8,3 +8,5 @@ venv/
 # Large ML files
 cosine_similarity.pkl
 *.pkl
+
+!movies_dictionary.pkl

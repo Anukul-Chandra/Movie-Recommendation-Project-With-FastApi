@@ -33,7 +33,7 @@ if not os.path.exists("cosine_similarity.pkl"):
 with open("cosine_similarity.pkl", "rb") as f:
     similarity = pickle.load(f)
 
-    
+
 # ---------- Utility functions ----------
 def fetch_poster(movie_id):
     url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US"
@@ -60,6 +60,12 @@ def recommend(movie):
 
 
 # ---------- API Endpoints ----------
+
+@app.get("/")
+def root():
+    return {"message": "Movie Recommendation API is running 🚀"}
+
+
 @app.get("/movies")
 async def get_movies():
     """Return list of all movies (for dropdown/search)"""
