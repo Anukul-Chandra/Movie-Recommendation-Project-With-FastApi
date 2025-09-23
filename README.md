@@ -25,6 +25,7 @@ This project serves personalized movie suggestions powered by a Machine Learning
 The similarity matrix file (`similarity.pkl`) is too large to be stored in the repository. Please download it manually from the link below and place it in the project root directory:
 
 [Download Cosine_ similarity.pkl](https://drive.google.com/file/d/1TzR82vf9JDxSZR04sX7lDdowTINbqoY0/view?usp=drive_link)
+
 [Download Movies_dictionary.pkl](https://drive.google.com/file/d/1ELqd7chpU4LxhiLd1KEyeFHIKuEF5Ms1/view?usp=drive_link)
 
 # Live Demo :
