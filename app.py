@@ -1,7 +1,5 @@
-
 from fastapi import FastAPI
-from pydantic import BaseModel
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import pickle
 import pandas as pd
@@ -14,22 +12,26 @@ app = FastAPI()
 # ---------- CORS (allow frontend requests) ----------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5501"],  # frontend server
+    allow_origins=["*"],  # allow all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# ---------- Serve frontend ----------
+@app.get("/")
+def serve_index():
+    return FileResponse("index.html")   # index.html must be in same folder as app.py
+
+
 # ---------- Load data ----------
 movies_list = pickle.load(open("movies_dictionary.pkl", "rb"))
-# movies_list should be a DataFrame with at least: title, movie_id, genres
- 
+
 # Ensure cosine_similarity.pkl exists
 if not os.path.exists("cosine_similarity.pkl"):
     url = "https://drive.google.com/uc?id=1TzR82vf9JDxSZR04sX7lDdowTINbqoY0"
     gdown.download(url, "cosine_similarity.pkl", quiet=False)
 
-# Load the pickle file
 with open("cosine_similarity.pkl", "rb") as f:
     similarity = pickle.load(f)
 
@@ -60,12 +62,6 @@ def recommend(movie):
 
 
 # ---------- API Endpoints ----------
-
-@app.get("/")
-def root():
-    return {"message": "Movie Recommendation API is running 🚀"}
-
-
 @app.get("/movies")
 async def get_movies():
     """Return list of all movies (for dropdown/search)"""
@@ -77,7 +73,6 @@ async def get_recommendations(movie: str):
     try:
         names, posters = recommend(movie)
 
-        
         if "genres" in movies_list.columns:
             genre = movies_list[movies_list["title"] == movie]["genres"].values[0]
         else:
