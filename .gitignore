@@ -1,0 +1,9 @@
+
+# Python cache
+__pycache__/
+
+# Virtual environment
+venv/
+
+# Large ML files
+cosine_similarity.pkl

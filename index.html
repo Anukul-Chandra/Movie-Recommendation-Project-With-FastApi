@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Movie Recommender</title>
+  <style>
+    /* Background with animated gradient */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #000000);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: #eee;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 2.5rem;
+      color: #0de35f;
+      text-shadow: 0 0 10px #3c3104, 0 0 20px #7c580e;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      text-align: center;
+    }
+
+    /* Glassmorphism search box */
+    .search-box {
+      background: rgba(255, 255, 255, 0.1);
+      /* backdrop-filter: blur(10px); */
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    /* hh */
+
+    input {
+      width: 70%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      transition: 0.3s;
+    }
+    input:focus {
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 0 10px #ffcc00;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      margin-left: 10px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(45deg, #ffcc00, #ffaa00);
+      color: #121212;
+      font-weight: bold;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #ffcc00;
+    }
+
+    /* Suggestions dropdown */
+    .suggestions {
+      background: rgba(0,0,0,0.8);
+      border-radius: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 10px auto;
+      width: 70%;
+      text-align: left;
+      position: relative;
+      z-index: 1000;
+    }
+    .suggestion-item {
+      padding: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .suggestion-item:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Movie cards */
+    .movies {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+    .movie {
+      background: rgba(255,255,255,0.08);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .movie:hover {
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    }
+    img {
+      width: 100%;
+      height: 270px;
+      object-fit: cover;
+    }
+    .title {
+      padding: 12px;
+      font-size: 15px;
+      font-weight: bold;
+      text-align: center;
+      color: #ffeb3b;
+      text-shadow: 0 0 5px #000;
+    }
+
+    /* Context text */
+    .context-text {
+      font-size: 1.2rem;
+      margin: 20px 0;
+      color: #ffcc00;
+      text-align: center;
+    }
+    .context-text span {
+      color: #00e676;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎬 Movie Recommender</h1>
+  <div class="container">
+    <div class="search-box">
+      <input type="text" id="movieInput" placeholder="🔍 Type a movie name...">
+      <button onclick="recommend()">Recommend</button>
+      <div class="suggestions" id="suggestions"></div>
+    </div>
+    <div id="recommendations"></div>
+  </div>
+
+  <script>
+    const API_BASE = "http://127.0.0.1:8000";
+    let allMovies = [];
+
+    async function loadMovies() {
+      let response = await fetch(`${API_BASE}/movies`);
+      let data = await response.json();
+      allMovies = data.movies;
+    }
+
+    document.getElementById("movieInput").addEventListener("input", function() {
+      let query = this.value.toLowerCase();
+      let suggestionsDiv = document.getElementById("suggestions");
+      suggestionsDiv.innerHTML = "";
+
+      if (query.length === 0) return;
+
+      let filtered = allMovies.filter(m => m.toLowerCase().includes(query));
+
+      if (filtered.length === 0) {
+        suggestionsDiv.innerHTML = `<div class="suggestion-item" style="color:red;">❌ No such movie in dataset</div>`;
+        return;
+      }
+
+      filtered.slice(0, 8).forEach(movie => {
+        let div = document.createElement("div");
+        div.className = "suggestion-item";
+        div.textContent = movie;
+        div.onclick = () => {
+          document.getElementById("movieInput").value = movie;
+          suggestionsDiv.innerHTML = "";
+        };
+        suggestionsDiv.appendChild(div);
+      });
+    });
+
+    async function recommend() {
+      let selectedMovie = document.getElementById("movieInput").value;
+      if (!allMovies.includes(selectedMovie)) {
+        document.getElementById("recommendations").innerHTML = `<p style="color:red;">❌ No such movie in dataset</p>`;
+        return;
+      }
+
+      let response = await fetch(`${API_BASE}/recommend?movie=${encodeURIComponent(selectedMovie)}`);
+      let data = await response.json();
+
+      let recommendationsDiv = document.getElementById("recommendations");
+      recommendationsDiv.innerHTML = "";
+
+      if (data.error) {
+        recommendationsDiv.innerHTML = `<p style="color:red;">${data.error}</p>`;
+        return;
+      }
+
+      // Context text
+      let contextText = document.createElement("div");
+      contextText.className = "context-text";
+      contextText.innerHTML = `🎥 You chose "<span>${data.movie}</span>".  Here are some films from the same genre that you might enjoy:`;
+      recommendationsDiv.appendChild(contextText);
+
+      // Movie cards
+      let moviesGrid = document.createElement("div");
+      moviesGrid.className = "movies";
+
+      data.names.forEach((name, i) => {
+        let movieDiv = document.createElement("div");
+        movieDiv.className = "movie";
+        movieDiv.innerHTML = `
+          <img src="${data.posters[i]}" alt="${name}">
+          <div class="title">${name}</div>
+        `;
+        moviesGrid.appendChild(movieDiv);
+      });
+
+      recommendationsDiv.appendChild(moviesGrid);
+    }
+
+    window.onload = loadMovies;
+  </script>
+</body>
+</html>
