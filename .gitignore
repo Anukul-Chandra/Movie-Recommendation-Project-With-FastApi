@@ -9,4 +9,4 @@ venv/
 cosine_similarity.pkl
 *.pkl
 
-!movies_dictionary.pkl
+movies_dictionary.pkl

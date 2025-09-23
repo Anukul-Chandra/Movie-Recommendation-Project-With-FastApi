@@ -25,7 +25,18 @@ def serve_index():
 
 
 # ---------- Load data ----------
+
+# Ensure movies_dictionary.pkl exists
+if not os.path.exists("movies_dictionary.pkl"):
+    # change this URL to a "uc?export=download" format so gdown works
+    url = "https://drive.google.com/uc?id=1ELqd7chpU4LxhiLd1KEyeFHIKuEF5Ms1"
+    # use fuzzy=True to allow using the original link or similar link
+    gdown.download(url, "movies_dictionary.pkl", quiet=False, fuzzy=True)
+
+# load movies list
 movies_list = pickle.load(open("movies_dictionary.pkl", "rb"))
+
+
 
 # Ensure cosine_similarity.pkl exists
 if not os.path.exists("cosine_similarity.pkl"):
