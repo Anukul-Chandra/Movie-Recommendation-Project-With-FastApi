@@ -7,3 +7,4 @@ venv/
 
 # Large ML files
 cosine_similarity.pkl
+*.pkl
