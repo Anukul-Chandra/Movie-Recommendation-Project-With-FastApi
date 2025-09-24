@@ -17,10 +17,16 @@ This project serves personalized movie suggestions powered by a Machine Learning
 
 ---
 
-## 📂 Video : 
+## 📂 Video & Image: 
 
 
 https://github.com/user-attachments/assets/91a1e393-cbb4-4ae0-81fc-db29d3dbad9d
+
+
+
+<img width="2540" height="2076" alt="screencapture-movie-recommendation-project-with-jpm2-onrender-2025-09-24-12_27_07" src="https://github.com/user-attachments/assets/49c1fb1d-d145-4348-a15d-c9bc66d290ec" />
+
+<img width="2538" height="2076" alt="screencapture-movie-recommendation-project-with-jpm2-onrender-2025-09-24-12_29_13" src="https://github.com/user-attachments/assets/9ee91c89-0ee5-4b20-b8d8-cf1a7787b56e" />
 
 
 
