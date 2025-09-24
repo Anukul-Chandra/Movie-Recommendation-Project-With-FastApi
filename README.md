@@ -30,7 +30,7 @@ https://github.com/user-attachments/assets/91a1e393-cbb4-4ae0-81fc-db29d3dbad9d
 
 
 
-## Download similarity.pkl file
+## Download Necessary pkl file
 
 The similarity matrix file (`similarity.pkl`) is too large to be stored in the repository. Please download it manually from the link below and place it in the project root directory:
 
