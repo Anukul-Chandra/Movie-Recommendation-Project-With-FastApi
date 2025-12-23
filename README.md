@@ -40,7 +40,9 @@ The similarity matrix file (`similarity.pkl`) is too large to be stored in the r
 
 # Live Demo :
 
-You can see the project here : https://movie-recommendation-project-with-jpm2.onrender.com/
+You can see the project  Live here : https://huggingface.co/spaces/AnukulChandra/Movie_Recommendation_System
+
+You can also see here : https://movie-recommendation-project-with-jpm2.onrender.com/
 
 ## 🛠️ Installation & Run Guide
 
@@ -192,7 +194,7 @@ fetch('http://localhost:8000/search?title=Matrix')
 
 **Production Environment:** This project is designed to run in production using Render cloud platform with GitHub integration, providing reliable, scalable hosting with automatic deployments.
 
-### ☁️ Deploy on Render via GitHub Integration
+### ☁️ Deploy on Render/ Hugging face via GitHub Integration
 
 Render with GitHub integration is the exclusive deployment method for this project.
 
